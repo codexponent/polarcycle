@@ -29,24 +29,37 @@ namespace PolarCycle {
             this.fileName = fileName;
         }
 
+        /// <summary>
+        /// Details Clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void metroTile1_Click(object sender, EventArgs e) {
             Details details = new Details();
             details.getInformation(fileName);
             details.Show();
             this.Hide();
         }
-
+        /// <summary>
+        /// Summary Clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void metroTile2_Click(object sender, EventArgs e) {
             Summary summary = new Summary();
-            summary.getInformation(fileName);
+            summary.getInformation(fileName, false);
             summary.Show();
             this.Hide();
         }
-
+        /// <summary>
+        /// Graph Clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void metroTile3_Click(object sender, EventArgs e) {
-            Graph graph = new Graph();
-            graph.getInformation(fileName);
-            graph.Show();
+            Summary summary = new Summary();
+            summary.getInformation(fileName, true);
+            summary.Show();
             this.Hide();
         }
     }
