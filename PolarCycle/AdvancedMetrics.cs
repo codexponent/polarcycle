@@ -20,6 +20,7 @@ namespace PolarCycle {
             ftp = 0.95 * pow;
             return ftp;
         }
+        
         /// <summary>
         /// Checking the IF
         /// </summary>
