@@ -46,6 +46,7 @@
             this.Weight = new MetroFramework.Controls.MetroLabel();
             this.Length = new MetroFramework.Controls.MetroLabel();
             this.Version = new MetroFramework.Controls.MetroLabel();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -268,11 +269,22 @@
             this.Version.TabIndex = 11;
             this.Version.Text = "Version";
             // 
+            // metroButton1
+            // 
+            this.metroButton1.Location = new System.Drawing.Point(1268, 19);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(75, 23);
+            this.metroButton1.TabIndex = 12;
+            this.metroButton1.Text = "Back";
+            this.metroButton1.UseSelectable = true;
+            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
+            // 
             // Details
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1366, 740);
+            this.Controls.Add(this.metroButton1);
             this.Controls.Add(this.RestHR);
             this.Controls.Add(this.MaxHR);
             this.Controls.Add(this.Monitor);
@@ -297,6 +309,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Name = "Details";
             this.Text = "Details";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Details_FormClosed);
             this.Load += new System.EventHandler(this.Details_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -338,5 +351,6 @@
         private MetroFramework.Controls.MetroLabel Weight;
         private MetroFramework.Controls.MetroLabel Length;
         private MetroFramework.Controls.MetroLabel Version;
+        private MetroFramework.Controls.MetroButton metroButton1;
     }
 }

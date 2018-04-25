@@ -13,12 +13,14 @@ using MetroFramework;
 namespace PolarCycle {
     public partial class HomePage : MetroForm {
         private string fileName;
+        string mStr;
         public HomePage() {
             InitializeComponent();
         }
 
         private void HomePage_Load(object sender, EventArgs e) {
-
+            // serialPort1.Open();
+            // timer1.Start();
         }
 
         /// <summary>
@@ -61,6 +63,16 @@ namespace PolarCycle {
             summary.getInformation(fileName, true);
             summary.Show();
             this.Hide();
+        }
+
+        private void metroButton1_Click(object sender, EventArgs e) {
+            UploadForm uploadForm = new UploadForm();
+            uploadForm.Show();
+            this.Hide();
+        }
+
+        private void HomePage_FormClosed(object sender, FormClosedEventArgs e) {
+            Application.Exit();
         }
     }
 }

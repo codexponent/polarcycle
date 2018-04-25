@@ -33,3 +33,6 @@ C:\Users\LENOVO\source\repos\PolarCycle\PolarCycle\bin\Debug\zh-cn\ZedGraph.reso
 C:\Users\LENOVO\source\repos\PolarCycle\PolarCycle\bin\Debug\zh-tw\ZedGraph.resources.dll
 C:\Users\LENOVO\source\repos\PolarCycle\PolarCycle\bin\Debug\ZedGraph.Web.dll
 C:\Users\LENOVO\source\repos\PolarCycle\PolarCycle\obj\Debug\PolarCycle.exe.config
+C:\Users\LENOVO\source\repos\PolarCycle\PolarCycle\obj\Debug\PolarCycle.LiveGraph.resources
+C:\Users\LENOVO\source\repos\PolarCycle\PolarCycle\obj\Debug\PolarCycle.Interval.resources
+C:\Users\LENOVO\source\repos\PolarCycle\PolarCycle\obj\Debug\PolarCycle.Comparison.resources

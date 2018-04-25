@@ -62,7 +62,7 @@ namespace PolarCycle {
                     string line;
                     bool paramsLine = false;
                     // Read and display lines from the file until the end of the file is reached.
-                    while ((line = sr.ReadLine()) != null) {
+                    while ((line = sr.ReadLine()) != null) { // Read until the [Params]
                         if (line == "[Params]") {
                             // line = [Params]
                             paramsLine = true;
@@ -78,6 +78,7 @@ namespace PolarCycle {
 
                                 if (line.Substring(0, 1) == "[") {
                                     // Checking for another List and stopping unwanted code to run; EOParamsLine
+                                    // Could have also checked for "[Note]" but it is not the same for all hm file
                                     paramsLine = false;
                                 }
                             }
@@ -99,6 +100,17 @@ namespace PolarCycle {
                 MetroMessageBox.Show(this, ex.ToString(), "Could not read the contents", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
+        }
+
+        private void metroButton1_Click(object sender, EventArgs e) {
+            HomePage homePage = new HomePage();
+            homePage.getInformation(fileName);
+            homePage.Show();
+            this.Hide();
+        }
+
+        private void Details_FormClosed(object sender, FormClosedEventArgs e) {
+            Application.Exit();
         }
     }
 }

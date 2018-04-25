@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MetroFramework.Forms;
 using MetroFramework;
 using System.IO;
+using System.Threading;
 
 namespace PolarCycle {
     public partial class Summary : MetroForm {
@@ -69,7 +70,7 @@ namespace PolarCycle {
         }
 
         /// <summary>
-        /// Splitting the Data on ' '
+        /// Splitting the Data on ' '  (Space)
         /// </summary>
         /// <param name="line">The string that is to be split</param>
         /// <returns>Splitted string</returns>
@@ -78,6 +79,7 @@ namespace PolarCycle {
         }
 
         private void Summary_Load(object sender, EventArgs e) {
+            // For Managing The Size of dataGridView 1 according to Windows Size
             metroGrid1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             StreamReader sr = new StreamReader(fileName, System.Text.Encoding.Default);
             // For Retrieving Smode and Displaying
@@ -88,8 +90,8 @@ namespace PolarCycle {
                 
             }*/
             // For Retrieving Smode and Displaying
-            Console.WriteLine("Version Version");
-            Console.WriteLine(Version);
+            //Console.WriteLine("Version Version");
+            //Console.WriteLine(Version);
 
             HRM = null;
             NumberOfLines = File.ReadAllLines(fileName).Length;
@@ -99,6 +101,8 @@ namespace PolarCycle {
                     // line = [Params]
                     paramsLine = true;
                 }
+                // Only taking the important parameters from the [Params] Section for further
+                // action for Summary Section
                 if (paramsLine == true) {
                     string[] parm = SplitEquals(line);
                     if (parm.Length > 1) {
@@ -130,6 +134,11 @@ namespace PolarCycle {
                 }
             }
             line = sr.ReadLine();
+            //The First Line of [HRData]
+
+            Console.WriteLine("Checking the line here");
+            Console.WriteLine("line");
+            Console.WriteLine(line);
 
             // Setup an accumulator
             double mph = 0;
@@ -139,6 +148,7 @@ namespace PolarCycle {
             int altitudeTotal = 0;
 
             // Binary Forms of Smode
+            // Taking the 1st, 2nd, 3rd, 4th, 5th, 6th, 7th and 8th Smode Character Seperately
             SMode0 = SMode[0].ToString();
             SMode1 = SMode[1].ToString();
             SMode2 = SMode[2].ToString();
@@ -164,7 +174,7 @@ namespace PolarCycle {
                     // Showing cloumn whend speed smode is 1
                     DataGridViewColumn speeding = new DataGridViewTextBoxColumn();
                     if (SMode6 == "0") {
-                        // Measurement unit accordind to Europe
+                        // Measurement unit according to Europe
                         speeding.HeaderText = "Speed (Km/Hr)";
                     } else if (SMode6 == "1") {
                         // Measurement unit accordint to US
@@ -325,6 +335,7 @@ namespace PolarCycle {
 
                 if (Version == "105") {
                     // Spliting the value of heart rate and adding each data to hearttotal 
+                    // 0 signifies heart rate only
                     heart = line.Split('\t')[0];
                     int heartint = Convert.ToInt32(heart);
                     List<string> heartarr = new List<string>();
@@ -332,6 +343,7 @@ namespace PolarCycle {
                     heartTotal += heartint;
 
                     // Spliting the value of speed and adding each data to speedtotal 
+                    // 1 signifies speed
                     speed = line.Split('\t')[1];
                     double speeed = int.Parse(speed);
                     // Converting into km/hr
@@ -341,9 +353,11 @@ namespace PolarCycle {
                     mph = ((double)speedint / (double)1.6);
 
                     // Spliting the value of cadence
+                    // 2 signifies cadence
                     cadence = line.Split('\t')[2];
                     int cadenceint = Convert.ToInt32(cadence);
 
+                    // Repetation Kicks in for other lines
                     line = sr.ReadLine();
                     // Adding data to datagridview
                     metroGrid1.Rows.Add(myDateTime, heart, speed1, cadence);
@@ -355,6 +369,7 @@ namespace PolarCycle {
                     List<string> heartarr = new List<string>();
                     heartarr.Add(heart);
                     heartTotal += heartint;
+
                     // Spliting the value of speed and adding each data to speedtotal 
                     speed = line.Split('\t')[1];
                     double speeed = int.Parse(speed);
@@ -378,9 +393,22 @@ namespace PolarCycle {
                     int powerint = Convert.ToInt32(power);
                     powerTotal += powerint;
 
-                    line = sr.ReadLine();
-                    // Adding data to datagridview
-                    metroGrid1.Rows.Add(myDateTime, heart, speed1, cadence, altitude, power);
+
+                    try {
+                        powerbal = line.Split('\t')[5];
+                        int Powerbalint = Convert.ToInt32(powerbal);
+
+                        line = sr.ReadLine();
+                        // Adding data to datagridview
+                        metroGrid1.Rows.Add(myDateTime, heart, speed1, cadence, altitude, power, powerbal);
+                    } catch (Exception error) {
+                        MetroMessageBox.Show(this, "Error in File. PLease Launch Application Again", error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.None);
+                        Application.Exit();
+                        //throw;
+                    }
+                    
+
+
                 } else if (Version == "107") {
                     // Spliting the value of heart rate and adding each data to hearttotal 
                     heart = line.Split('\t')[0];
@@ -435,6 +463,7 @@ namespace PolarCycle {
             double altAvg = 0.0;
             if (counter > 0) {
                 // Calculating Average
+                // Average Fornula
                 heartAvg = heartTotal / counter;
                 speedAvg = (speedTotal / counter);
 
@@ -507,30 +536,84 @@ namespace PolarCycle {
             PowerLabelAverage.Text = "Power Level Average:\n" + powerAvg.ToString() + " watts";
             AltitudeLabelAverage.Text = "Altitude Average:\n" + altAvg.ToString() + " meters";
 
+
+            // Thread t = new Thread();
+
+            // this.demoThread =
+            // new Thread(new ThreadStart(this.ChangeForm));
+            // this.demoThread.Start();
+
+            // Thread t = new Thread(delegate ()
+            // {
+
+            // ChangeForm();
+
+            // });
+            // t.Start();
+
+
+        }
+
+        private void ChangeForm() {
             if (graphActive == false) {
                 // Do Nothing
             } else {
                 Graph graph = new Graph();
-                graph.getInformation(fileName, 
-                                        MaxHR, 
-                                        StartTime, 
-                                        metroGrid1, 
-                                        Version, 
-                                        SMode, 
-                                        SMode0, 
-                                        SMode1, 
-                                        SMode2, 
+                graph.getInformation(fileName,
+                                        MaxHR,
+                                        StartTime,
+                                        metroGrid1,
+                                        Version,
+                                        SMode,
+                                        SMode0,
+                                        SMode1,
+                                        SMode2,
                                         SMode3,
                                         SMode4,
                                         SMode5,
                                         SMode6,
                                         SMode7,
                                         SMode8,
-                                        seconds);
+                                        seconds,
+                                        Interval);
                 graph.Show();
                 this.Hide();
+                // this.Close();
             }
+        }
 
+        private void metroButton1_Click(object sender, EventArgs e) {
+            Graph graph = new Graph();
+            graph.getInformation(fileName,
+                                    MaxHR,
+                                    StartTime,
+                                    metroGrid1,
+                                    Version,
+                                    SMode,
+                                    SMode0,
+                                    SMode1,
+                                    SMode2,
+                                    SMode3,
+                                    SMode4,
+                                    SMode5,
+                                    SMode6,
+                                    SMode7,
+                                    SMode8,
+                                    seconds,
+                                    Interval);
+            graph.Show();
+            this.Hide();
+        }
+
+        private void metroButton2_Click(object sender, EventArgs e) {
+            HomePage homePage = new HomePage();
+            homePage.getInformation(fileName);
+            homePage.Show();
+            this.Hide();
+        }
+
+        private void Summary_FormClosed(object sender, FormClosedEventArgs e) {
+            Application.Exit();
         }
     }
 }
